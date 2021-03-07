@@ -8,7 +8,7 @@ public class OTPGenerator {
         SecureRandom secureRandom = new SecureRandom();
 
         for (int index = 0; index < length; index++) {
-            stringBuilder.append(String.valueOf(secureRandom.nextInt(10)));
+            stringBuilder.append(secureRandom.nextInt(10));
         }
 
         return stringBuilder.toString();
