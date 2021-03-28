@@ -17,29 +17,24 @@ public class SignUpService {
     private UserMapper userMapper;
 
     public String validateUserInfo(UserDto userDto) {
-        try {
-            log.debug("START SIGN UP DUPLICATION CHECK!");
-            UserDto userInfoFromDB = userMapper.selectUserInfo(userDto.getPhone());
+        UserDto userInfoFromDB = userMapper.selectUserInfo(userDto.getPhone());
 
-            if (Objects.isNull(userInfoFromDB)) {
-                log.debug("Member information does not exist.");
-                return StatusConstants.MEMBER_INFO_NOT_EXIST;
-            }
-
-            if (!userInfoFromDB.getName().equals(userDto.getName())) {
-                log.debug("User name is not correct.");
-                return StatusConstants.NAME_NOT_EQUAL;
-            }
-
-            if (!userInfoFromDB.getBirth().equals(userDto.getBirth())) {
-                log.debug("User birth is not correct.");
-                return StatusConstants.BIRTH_NOT_EQUAL;
-            }
-
-            // PIN Check 프로세스 진행
-            return StatusConstants.MEMBER_INFO_MATCHED;
-        } finally {
-            log.debug("END SIGN UP DUPLICATION CHECK!");
+        if (Objects.isNull(userInfoFromDB)) {
+            log.debug("회원 정보가 존재하지 않습니다.");
+            return StatusConstants.MEMBER_INFO_NOT_EXIST;
         }
+
+        if (!Objects.equals(userInfoFromDB.getName(), userDto.getName())) {
+            log.debug("가입자의 이름이 올바르지 않습니다.");
+            return StatusConstants.NAME_NOT_EQUAL;
+        }
+
+        if (!Objects.equals(userInfoFromDB.getBirth(), userDto.getBirth())) {
+            log.debug("가입자의 생년월일이 올바르지 않습니다.");
+            return StatusConstants.BIRTH_NOT_EQUAL;
+        }
+
+        // PIN Check 프로세스 진행
+        return StatusConstants.MEMBER_INFO_MATCHED;
     }
 }
